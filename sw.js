@@ -1,4 +1,4 @@
-const CACHE='faisal-card-v5';
+const CACHE='faisal-card-v6';
 const FILES=['./','index.html','logo.png','manifest.webmanifest','Faisal-Alshammari-ar.vcf','Faisal-Alshammari-en.vcf','icons/apple-touch-icon.png','icons/icon-192.png','icons/icon-512.png',
   'assets/tajawal/Iura6YBj_oCad4k1nzSBC5xLhLFw4Q.woff2','assets/tajawal/Iura6YBj_oCad4k1nzGBC5xLhLE.woff2','assets/tajawal/Iurf6YBj_oCad4k1l4qkHrRpiZtK6GwN9w.woff2','assets/tajawal/Iurf6YBj_oCad4k1l4qkHrFpiZtK6Gw.woff2'];
 // cache:'reload' skips the browser's HTTP cache so a new worker never stores a stale copy
@@ -8,6 +8,8 @@ self.addEventListener('fetch',e=>{
   const req=e.request;
   if(req.method!=='GET')return;
   // The page itself: always ask the network first (fresh copy), fall back to cache after 2s or when offline
+  // Only handle this card's own page; another card in a subfolder has its own worker
+  if(req.mode==='navigate'&&!['./','index.html'].some(x=>new URL(x,self.registration.scope).pathname===new URL(req.url).pathname))return;
   if(req.mode==='navigate'){
     e.respondWith(new Promise(resolve=>{
       let done=false;
