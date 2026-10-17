@@ -41,6 +41,11 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border-radius:4.5%/7%;overflow:hidden;container-type:inline-size;
   box-shadow:0 1px 2px rgb(14 58 102/.08),0 12px 32px -8px rgb(14 58 102/.22);display:grid;grid-template-columns:41% 1px 1fr;align-items:center}
 .back{transform:rotateY(180deg)}
+/* Safari ignores backface-visibility on positioned children, so hide the far face outright at the midpoint of the flip */
+.front{transition:visibility 0s linear .35s}
+.back{visibility:hidden;transition:visibility 0s linear .35s}
+.flipped .front{visibility:hidden}
+.flipped .back{visibility:visible}
 .brand{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.4cqw;padding:4cqw 3cqw}
 .brand svg.wave{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .brand>*:not(.wave){position:relative;z-index:1}
@@ -71,7 +76,7 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
 .shot .wrap{max-width:none;min-height:0;display:block}
 .shot .actions,.shot .hint{display:none}
 .shot .face{box-shadow:none}
-.shot .inner{transition:none}
+.shot .inner,.shot .face{transition:none}
 </style>
 </head>
 <body>
