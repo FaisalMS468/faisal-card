@@ -33,15 +33,15 @@ t = t.replace(svgs[0], qr(vc_ar)).replace(svgs[1], qr(vc_en))
 
 phone_disp = cfg['phone_display']
 reps = [
-    ('<title>فيصل الشمري | Faisal Alshammari</title>', f"<title>{cfg['ar']['name']} | {cfg['en']['name']}</title>"),
+    ('<title>فيصل مذود الشمري | Faisal M. Alshammari</title>', f"<title>{cfg['ar']['name']} | {cfg['en']['name']}</title>"),
     ('<meta name="apple-mobile-web-app-title" content="بطاقتي">', f'<meta name="apple-mobile-web-app-title" content="{cfg["short_name"]}">'),
     ('href="icons/', 'href="../icons/'),
     ('href="assets/', 'href="../assets/'),
     ('url(assets/', 'url(../assets/'),
     ('src="logo.png"', 'src="../logo.png"'),
-    ('<p class="name">فيصل الشمري</p>', f"<p class=\"name\">{cfg['ar'].get('display', cfg['ar']['name'])}</p>"),
+    ('<p class="name">فيصل مذود الشمري</p>', f"<p class=\"name\">{cfg['ar'].get('display', cfg['ar']['name'])}</p>"),
     ('<p class="title">مدير الإدارة العامة لسلاسل الإمداد</p>', f"<p class=\"title\">{cfg['ar']['title_html']}</p>"),
-    ('<p class="name">Faisal Alshammari</p>', f"<p class=\"name\">{cfg['en']['name']}</p>"),
+    ('<p class="name">Faisal M. Alshammari</p>', f"<p class=\"name\">{cfg['en']['name']}</p>"),
     ('<p class="title">Director, General Administration<br>of Supply Chain</p>', f"<p class=\"title\">{cfg['en']['title_html']}</p>"),
     ('+966 54 369 8888', phone_disp),
     ('fal-shammry@moh.gov.sa', cfg['email']),
