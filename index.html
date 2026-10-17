@@ -95,10 +95,11 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
 .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 .btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .hint{margin:0;text-align:center;color:var(--muted);font-size:.9rem}
+.ver{margin:0;text-align:center;color:var(--muted);font-size:.7rem;opacity:.5;font-variant-numeric:tabular-nums}
 /* image export mode: #shot-ar / #shot-en */
 .shot body{padding:0;background:transparent}
 .shot .wrap{max-width:none;min-height:0;display:block}
-.shot .actions,.shot .hint{display:none}
+.shot .actions,.shot .hint,.shot .ver{display:none}
 .shot .face{box-shadow:none}
 </style>
 </head>
@@ -151,6 +152,7 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
     <button class="btn" id="turn" type="button">English</button>
   </div>
   <p class="hint" id="hint">اضغط على البطاقة لقلبها</p>
+  <p class="ver">v5</p>
 </main>
 <script>
 const root=document.documentElement,scene=document.getElementById('scene'),save=document.getElementById('save'),turn=document.getElementById('turn'),hint=document.getElementById('hint');
@@ -177,7 +179,12 @@ document.getElementById('flip').addEventListener('click',flip);
 turn.addEventListener('click',flip);
 const h=location.hash;
 if(h.startsWith('#shot')){root.classList.add('shot');apply(h==='#shot-en');}
-if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js');
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});
+  // When a new version takes over, reload once so it shows straight away
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!reloaded&&navigator.serviceWorker.controller){reloaded=true;location.reload();}});
+}
 </script>
 </body>
 </html>
