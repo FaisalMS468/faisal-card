@@ -1,0 +1,23 @@
+{
+  "slug": "fahad",
+  "file": "Fahad-Alherbeed",
+  "short_name": "بطاقة فهد",
+  "phone": "+966554871118",
+  "phone_display": "+966 55 487 1118",
+  "email": "FAlShammari160@moh.gov.sa",
+  "ar": {
+    "name": "فهد بن حمدان الهربيد",
+    "first": "فهد",
+    "last": "الهربيد",
+    "title": "نائب الرئيس التنفيذي للتشغيل",
+    "title_html": "نائب الرئيس التنفيذي للتشغيل",
+    "display": "فهد الهربيد"
+  },
+  "en": {
+    "name": "Fahad H. Alherbeed",
+    "first": "Fahad",
+    "last": "Alherbeed",
+    "title": "Chief Operating Officer",
+    "title_html": "Chief Operating Officer"
+  }
+}

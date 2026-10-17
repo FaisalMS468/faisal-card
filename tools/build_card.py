@@ -1,6 +1,6 @@
 """Build another person's card as a subfolder, using the main card (index.html) as the template.
 
-Usage: python3 tools/build_card.py path/to/<slug>.json
+Usage: python3 tools/build_card.py tools/cards/<slug>.json
 The folder <slug>/ gets its own page, contact files, manifest and service worker; logo, icons and fonts are shared from the root.
 """
 import io, json, re, sys, pathlib, segno
@@ -39,7 +39,7 @@ reps = [
     ('href="assets/', 'href="../assets/'),
     ('url(assets/', 'url(../assets/'),
     ('src="logo.png"', 'src="../logo.png"'),
-    ('<p class="name">فيصل الشمري</p>', f"<p class=\"name\">{cfg['ar']['name']}</p>"),
+    ('<p class="name">فيصل الشمري</p>', f"<p class=\"name\">{cfg['ar'].get('display', cfg['ar']['name'])}</p>"),
     ('<p class="title">مدير الإدارة العامة لسلاسل الإمداد</p>', f"<p class=\"title\">{cfg['ar']['title_html']}</p>"),
     ('<p class="name">Faisal Alshammari</p>', f"<p class=\"name\">{cfg['en']['name']}</p>"),
     ('<p class="title">Director, General Administration<br>of Supply Chain</p>', f"<p class=\"title\">{cfg['en']['title_html']}</p>"),
