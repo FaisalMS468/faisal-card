@@ -62,18 +62,14 @@ html,body{margin:0;min-height:100%}
 body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent;
   padding:max(24px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .wrap{max-width:560px;min-height:calc(100dvh - 48px);margin:0 auto;display:flex;flex-direction:column;justify-content:center;gap:22px}
-.scene{perspective:1400px;width:100%}
+.scene{width:100%}
 .flip{all:unset;display:block;width:100%;cursor:pointer;border-radius:4.5%/7%}
 .flip:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
-.inner{position:relative;width:100%;aspect-ratio:1.586;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.flipped .inner{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border-radius:4.5%/7%;overflow:hidden;container-type:inline-size;
+.inner{position:relative;width:100%;aspect-ratio:1.586;will-change:transform}
+.face{position:absolute;inset:0;background:var(--card);border-radius:4.5%/7%;overflow:hidden;container-type:inline-size;
   box-shadow:0 1px 2px rgb(14 58 102/.08),0 12px 32px -8px rgb(14 58 102/.22);display:grid;grid-template-columns:41% 1px 1fr;align-items:center}
-.back{transform:rotateY(180deg)}
-/* Safari ignores backface-visibility on positioned children, so hide the far face outright at the midpoint of the flip */
-.front{transition:visibility 0s linear .35s}
-.back{visibility:hidden;transition:visibility 0s linear .35s}
-.flipped .front{visibility:hidden}
+/* 2D flip: only one face is ever shown; the card squeezes to its edge, swaps face, and opens again (Safari mangles 3D flips) */
+.back,.flipped .front{visibility:hidden}
 .flipped .back{visibility:visible}
 .brand{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.4cqw;padding:4cqw 3cqw}
 .brand svg.wave{position:absolute;inset:0;width:100%;height:100%;z-index:0}
@@ -99,13 +95,11 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
 .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 .btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .hint{margin:0;text-align:center;color:var(--muted);font-size:.9rem}
-@media (prefers-reduced-motion:reduce){.inner{transition:none}}
 /* image export mode: #shot-ar / #shot-en */
 .shot body{padding:0;background:transparent}
 .shot .wrap{max-width:none;min-height:0;display:block}
 .shot .actions,.shot .hint{display:none}
 .shot .face{box-shadow:none}
-.shot .inner,.shot .face{transition:none}
 </style>
 </head>
 <body>
@@ -160,7 +154,9 @@ body{background:var(--ground);color:var(--ink);font-family:var(--font);-webkit-t
 </main>
 <script>
 const root=document.documentElement,scene=document.getElementById('scene'),save=document.getElementById('save'),turn=document.getElementById('turn'),hint=document.getElementById('hint');
-function set(en){
+const inner=scene.querySelector('.inner'),still=matchMedia('(prefers-reduced-motion: reduce)');
+let busy=false;
+function apply(en){
   scene.classList.toggle('flipped',en);
   save.href=en?'Faisal-Alshammari-en.vcf':'Faisal-Alshammari-ar.vcf';
   save.textContent=en?'Save contact':'حفظ جهة الاتصال';
@@ -168,10 +164,19 @@ function set(en){
   hint.textContent=en?'Tap the card to flip':'اضغط على البطاقة لقلبها';
   root.lang=en?'en':'ar';
 }
-document.getElementById('flip').addEventListener('click',()=>set(!scene.classList.contains('flipped')));
-turn.addEventListener('click',()=>set(!scene.classList.contains('flipped')));
+function flip(){
+  const en=!scene.classList.contains('flipped');
+  if(still.matches||!inner.animate){apply(en);return;}
+  if(busy)return;busy=true;
+  inner.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:170,easing:'ease-in'}).onfinish=()=>{
+    apply(en);
+    inner.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:190,easing:'ease-out'}).onfinish=()=>{busy=false;};
+  };
+}
+document.getElementById('flip').addEventListener('click',flip);
+turn.addEventListener('click',flip);
 const h=location.hash;
-if(h.startsWith('#shot')){root.classList.add('shot');set(h==='#shot-en');}
+if(h.startsWith('#shot')){root.classList.add('shot');apply(h==='#shot-en');}
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js');
 </script>
 </body>

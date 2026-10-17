@@ -1,4 +1,4 @@
-const CACHE='faisal-card-v3';
+const CACHE='faisal-card-v4';
 const FILES=['./','index.html','logo.png','manifest.webmanifest','Faisal-Alshammari-ar.vcf','Faisal-Alshammari-en.vcf','icons/apple-touch-icon.png','icons/icon-192.png','icons/icon-512.png',
   'assets/tajawal/Iura6YBj_oCad4k1nzSBC5xLhLFw4Q.woff2','assets/tajawal/Iura6YBj_oCad4k1nzGBC5xLhLE.woff2','assets/tajawal/Iurf6YBj_oCad4k1l4qkHrRpiZtK6GwN9w.woff2','assets/tajawal/Iurf6YBj_oCad4k1l4qkHrFpiZtK6Gw.woff2'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
